@@ -19,9 +19,9 @@
 #
 
 pulp_soc:
-  commit: v3.0.0
+  commit: fullstack_ip_integration
   server: https://github.com
-  group:  pulp-platform
+  group:  p3da
 
 tbtools:
   commit: v0.2.1
