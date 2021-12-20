@@ -63,7 +63,15 @@ module pulpissimo #(
   inout wire pad_jtag_tms,
   inout wire pad_jtag_trst,
 
-  inout wire pad_xtal_in
+  inout wire pad_xtal_in,
+
+	input  wire       phy_rx_clk,
+	input  wire [3:0] phy_rxd,
+	input  wire       phy_rx_ctl,
+	output wire       phy_tx_clk,
+	output wire [3:0] phy_txd,
+	output wire       phy_tx_ctl,
+	output wire       phy_reset_n,
 );
 
   localparam AXI_ADDR_WIDTH             = 32;
@@ -854,7 +862,15 @@ module pulpissimo #(
         .async_data_master_r_data_i  ( '0                 ), // We don't have a cluster
         .async_data_master_b_wptr_i  ( '0                 ), // We don't have a cluster
         .async_data_master_b_data_i  ( '0                 ), // We don't have a cluster
-        .async_cluster_events_rptr_i ( '0                 )  // We don't have a cluster
+        .async_cluster_events_rptr_i ( '0                 ), // We don't have a cluster
+
+				.phy_rx_clk(phy_rx_clk),
+				.phy_rxd(phy_rxd),
+				.phy_rx_ctl(phy_rx_ctl),
+				.phy_tx_clk(phy_tx_clk),
+				.phy_txd(phy_txd),
+				.phy_tx_ctl(phy_tx_ctl),
+				.phy_reset_n(phy_reset_n)
         );
 
 assign s_dma_pe_evt_valid               = '0;

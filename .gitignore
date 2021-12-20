@@ -5,3 +5,9 @@ xrun.log
 .bender
 bender
 Bender.lock
+/ips
+/install
+/pulp-sdk
+/ipstools
+/sim/common_cells_lib
+/.cached_ipdb.json

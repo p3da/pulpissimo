@@ -970,6 +970,9 @@ module tb_pulp;
 endtask
 
 
+test_EthFifo1gTs#() i_test_EthFifo1gTs();
+
+
 endmodule // tb_pulp
 
 // Local Variables:
