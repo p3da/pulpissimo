@@ -65,8 +65,6 @@ module pulpissimo #(
 
   inout wire pad_xtal_in,
 
-	input wire pad_xtal_in90,
-
 	input  wire       phy_rx_clk,
 	input  wire [3:0] phy_rxd,
 	input  wire       phy_rx_ctl,
@@ -74,6 +72,10 @@ module pulpissimo #(
 	output wire [3:0] phy_txd,
 	output wire       phy_tx_ctl,
 	output wire       phy_reset_n,
+
+	input wire        clk_eth,
+	input wire        clk_eth90,
+	input wire        rst_eth,
 
 	output wire [7:0] led
 );
@@ -875,7 +877,11 @@ module pulpissimo #(
 				.phy_txd										 (phy_txd),
 				.phy_tx_ctl									 (phy_tx_ctl),
 				.phy_reset_n                 (phy_reset_n),
-				.ref_clk90_i                 (pad_xtal_in90),
+
+        .clk_eth                     (clk_eth),
+        .clk_eth90                   (clk_eth90),
+        .rst_eth                     (rst_eth),
+
 				.led											   (led)
         );
 

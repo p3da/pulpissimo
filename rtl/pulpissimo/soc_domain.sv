@@ -217,7 +217,9 @@ module soc_domain #(
 		output logic       	phy_tx_ctl,
 		output logic       	phy_reset_n,
 
-		input logic         ref_clk90_i,
+		input logic         clk_eth,
+		input logic         clk_eth90,
+		input logic         rst_eth,
 
 		output logic [7:0]  led
 
@@ -380,7 +382,9 @@ module soc_domain #(
 			.phy_txd,
 			.phy_tx_ctl,
 			.phy_reset_n,
-			.ref_clk90_i,
+      .clk_eth,
+      .clk_eth90,
+      .rst_eth,
 			.led
     );
 

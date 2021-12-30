@@ -230,6 +230,10 @@ module tb_pulp;
 	 logic s_phy_tx_ctl;
 	 logic s_phy_reset_n;
 
+   logic s_clk_eth;
+   logic s_clk_eth90;
+   logic s_rst_eth;
+
    `ifdef USE_DPI
    generate
       if (CONFIG_FILE != "NONE") begin
@@ -601,23 +605,27 @@ module tb_pulp;
 
       .pad_xtal_in        ( w_clk_ref          ),
 
-			.pad_xtal_in90      ( s_clk90            ),
-
 			.phy_rx_clk									 (s_phy_rx_clk),
 			.phy_rxd										 (s_phy_rxd),
 			.phy_rx_ctl									 (s_phy_rx_ctl),
 			.phy_tx_clk									 (s_phy_tx_clk),
 			.phy_txd										 (s_phy_txd),
 			.phy_tx_ctl									 (s_phy_tx_ctl),
-			.phy_reset_n                 (s_phy_reset_n)
+			.phy_reset_n                 (s_phy_reset_n),
+
+      .clk_eth                     (s_clk_eth),
+      .clk_eth90                   (s_clk_eth90),
+      .rst_eth                     (s_rst_eth)
    );
 
    tb_clk_gen #(
 		   .CLK_PERIOD(REF_CLK_PERIOD)
 	 ) i_ref_clk_gen (
 		   .clk_o(s_clk_ref),
-			 .clk90_o(s_clk90_ref)
+			 .clk90_o(s_clk_eth90)
 	 );
+
+   assign s_eth_clk = s_clk_ref;
 
     initial begin: timing_format
         $timeformat(-9, 0, "ns", 9);
