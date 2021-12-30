@@ -29,7 +29,11 @@ THE SOFTWARE.
 /*
  * Testbench for ptp_clock
  */
-module test_EthFifo1gTs;
+module test_EthFifo1gTs(
+		output wire phy_tx_clk,
+		output wire phy_tx_ctl,
+		output wire[3:0] phy_txd
+);
 
 // Parameters for PTP clock
 parameter PERIOD_NS_WIDTH = 4;
@@ -179,7 +183,7 @@ wire error_header_early_termination;
 
 
 // duration for each bit = 20 * timescale = 2 * 1 ns  = 2ns
-localparam period = 2000;  
+localparam period = 2000;
 
 ptp_clock #(
     .PERIOD_NS_WIDTH(PERIOD_NS_WIDTH),
@@ -376,9 +380,9 @@ UUT_eth_axis_rx (
 // note that sensitive list is omitted in always block
 // therefore always-block run forever
 // clock period = 2 ns
-always 
+always
 begin
-    clk_250MHz = 1'b1; 
+    clk_250MHz = 1'b1;
     #2000; // high for 20 * timescale = 2 ns
 
     clk_250MHz = 1'b0;
@@ -388,23 +392,23 @@ end
 // note that sensitive list is omitted in always block
 // therefore always-block run forever
 // clock period = 2 ns
-always 
+always
 begin
-    clk_125MHz = 1'b1; 
+    clk_125MHz = 1'b1;
     #2000; // high for 20 * timescale = 2 ns
-    gtx_clk90  = 1'b1; 
+    gtx_clk90  = 1'b1;
     #2000;
 
     clk_125MHz = 1'b0;
     #2000; // low for 20 * timescale = 2 ns
-    gtx_clk90  = 1'b0; 
+    gtx_clk90  = 1'b0;
     #2000;
 end
 
 integer i;
 
 
-initial 
+initial
     begin
 
 
@@ -475,6 +479,9 @@ initial
 
 end
 
+assign phy_tx_clk = rgmii_rx_clk;
+assign phy_tx_ctl = rgmii_rx_ctl;
+assign phy_txd = rgmii_rxd;
 
 
 

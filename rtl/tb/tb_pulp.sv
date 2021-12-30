@@ -129,6 +129,7 @@ module tb_pulp;
    wire                  w_rst_n;
 
    logic                 s_clk_ref;
+	 logic								 s_clk90_ref;
    wire                  w_clk_ref;
 
    tri                   w_spi_master_sdio0;
@@ -221,6 +222,13 @@ module tb_pulp;
 
    logic [8:0] jtag_conf_reg, jtag_conf_rego; //22bits but actually only the last 9bits are used
 
+	 logic s_phy_rx_clk;
+	 logic [3:0] s_phy_rxd;
+	 logic s_phy_rx_ctl;
+	 logic s_phy_tx_clk;
+	 logic [3:0] s_phy_txd;
+	 logic s_phy_tx_ctl;
+	 logic s_phy_reset_n;
 
    `ifdef USE_DPI
    generate
@@ -591,10 +599,25 @@ module tb_pulp;
       .pad_jtag_tms       ( w_tms              ),
       .pad_jtag_trst      ( w_trstn            ),
 
-      .pad_xtal_in        ( w_clk_ref          )
+      .pad_xtal_in        ( w_clk_ref          ),
+
+			.pad_xtal_in90      ( s_clk90            ),
+
+			.phy_rx_clk									 (s_phy_rx_clk),
+			.phy_rxd										 (s_phy_rxd),
+			.phy_rx_ctl									 (s_phy_rx_ctl),
+			.phy_tx_clk									 (s_phy_tx_clk),
+			.phy_txd										 (s_phy_txd),
+			.phy_tx_ctl									 (s_phy_tx_ctl),
+			.phy_reset_n                 (s_phy_reset_n)
    );
 
-   tb_clk_gen #( .CLK_PERIOD(REF_CLK_PERIOD) ) i_ref_clk_gen (.clk_o(s_clk_ref) );
+   tb_clk_gen #(
+		   .CLK_PERIOD(REF_CLK_PERIOD)
+	 ) i_ref_clk_gen (
+		   .clk_o(s_clk_ref),
+			 .clk90_o(s_clk90_ref)
+	 );
 
     initial begin: timing_format
         $timeformat(-9, 0, "ns", 9);
@@ -970,7 +993,12 @@ module tb_pulp;
 endtask
 
 
-test_EthFifo1gTs#() i_test_EthFifo1gTs();
+// test_EthFifo1gTs #(
+// ) i_test_EthFifo1gTs(
+// 	  .phy_tx_clk(s_phy_rx_clk),
+// 	  .phy_tx_ctl(s_phy_rx_ctl),
+// 		.phy_txd(s_phy_txd)
+// );
 
 
 endmodule // tb_pulp

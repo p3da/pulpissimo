@@ -10,7 +10,6 @@ tb:
     tb_fs_handler.sv,
     dpi_models/dpi_models.sv,
     tb_driver/tb_driver.sv,
-    test_EthFifo1gTs.v,
     tb_pulp.sv,
     SimJTAG.sv,
     SimDTM.sv,

@@ -207,7 +207,19 @@ module soc_domain #(
     input logic                           dma_pe_irq_valid_i,
 
     output logic                          pf_evt_ack_o,
-    input logic                           pf_evt_valid_i
+    input logic                           pf_evt_valid_i,
+
+		input logic       	phy_rx_clk,
+		input logic [3:0] 	phy_rxd,
+		input logic      		phy_rx_ctl,
+		output logic       	phy_tx_clk,
+		output logic [3:0] 	phy_txd,
+		output logic       	phy_tx_ctl,
+		output logic       	phy_reset_n,
+
+		input logic         ref_clk90_i,
+
+		output logic [7:0]  led
 
     /*AUTOINOUT*/
 );
@@ -359,7 +371,17 @@ module soc_domain #(
       .jtag_tms_i,
       .jtag_tdi_i,
       .jtag_tdo_o,
-      .cluster_dbg_irq_valid_o
+      .cluster_dbg_irq_valid_o,
+
+			.phy_rx_clk,
+			.phy_rxd,
+			.phy_rx_ctl,
+			.phy_tx_clk,
+			.phy_txd,
+			.phy_tx_ctl,
+			.phy_reset_n,
+			.ref_clk90_i,
+			.led
     );
 
 endmodule

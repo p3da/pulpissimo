@@ -17,17 +17,42 @@
 module tb_clk_gen #(
    parameter CLK_PERIOD = 1.0
 ) (
-   output logic   clk_o
+   output logic   clk_o,
+
+	 /* clock with phase 90 */
+	 output logic   clk90_o
 );
+
+	 logic s_clk;
+	 logic s_clk90;
 
    initial
    begin
-      clk_o  = 1'b1;
+      s_clk  = 1'b1;
 
       // wait one cycle first
       #(CLK_PERIOD);
 
-      forever clk_o = #(CLK_PERIOD/2) ~clk_o;
+      forever s_clk = #(CLK_PERIOD/2) ~s_clk;
    end
+
+	 assign clk_o = s_clk;
+
+	 always @(posedge s_clk)
+	 begin
+	   #(CLK_PERIOD/4);
+
+		 s_clk90 = 1'b1;
+	 end
+
+
+ 	 always @(negedge s_clk)
+	 begin
+ 	   #(CLK_PERIOD/4);
+
+ 		 s_clk90 = 1'b0;
+ 	 end
+
+	 assign clk90_o = s_clk90;
 
 endmodule
