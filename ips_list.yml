@@ -19,7 +19,7 @@
 #
 
 pulp_soc:
-  commit: v3.0.0_espV1
+  commit: udpcomplete_v1
   server: https://github.com
   group:  p3da
 
