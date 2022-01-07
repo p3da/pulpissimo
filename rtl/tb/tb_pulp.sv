@@ -357,6 +357,7 @@ module tb_pulp;
    end
 
     assign w_rst_n      = tmp_rst_n;
+    assign s_rst_eth    = w_rst_n;
     assign w_clk_ref    = tmp_clk_ref;
     assign s_cam_valid  = 1'b0;
     assign w_trstn      = tmp_trstn;
@@ -1005,7 +1006,7 @@ endtask
 // ) i_test_EthFifo1gTs(
 // 	  .phy_tx_clk(s_phy_rx_clk),
 // 	  .phy_tx_ctl(s_phy_rx_ctl),
-// 		.phy_txd(s_phy_txd)
+// 		.phy_txd(s_phy_rxd)
 // );
 
 

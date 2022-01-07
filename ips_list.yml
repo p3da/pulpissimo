@@ -19,7 +19,7 @@
 #
 
 pulp_soc:
-  commit: udpcomplete_v1
+  commit: v3.0.0_udma_extend
   server: https://github.com
   group:  p3da
 
