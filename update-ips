@@ -10,7 +10,7 @@ import os
 import sys
 
 
-DEFAULT_SERVER = "https://github.com"
+DEFAULT_SERVER = "git@github.com"
 
 parser = argparse.ArgumentParser(
     prog='PULP update script',
@@ -56,4 +56,3 @@ ipdb.save_database()
 
 # # pass arguments and call generate script
 # execute("./generate-scripts " + (' '.join(sys.argv[1:])))
-

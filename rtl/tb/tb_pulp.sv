@@ -45,6 +45,9 @@ module tb_pulp;
    // period of the external reference clock (32.769kHz)
    parameter  REF_CLK_PERIOD = 30517ns;
 
+   // for simulation, ref clk for eth_mac is 125kHz
+   parameter  ETH_CLK_PERIOD = 8000ns;
+
    // how L2 is loaded. valid values are "JTAG" or "STANDALONE", the latter works only when USE_S25FS256S_MODEL is 1
    parameter  LOAD_L2 = "JTAG";
 
@@ -623,10 +626,15 @@ module tb_pulp;
 		   .CLK_PERIOD(REF_CLK_PERIOD)
 	 ) i_ref_clk_gen (
 		   .clk_o(s_clk_ref),
-			 .clk90_o(s_clk_eth90)
+			 .clk90_o()
 	 );
 
-   assign s_eth_clk = s_clk_ref;
+   tb_clk_gen #(
+      .CLK_PERIOD(ETH_CLK_PERIOD)
+  ) i_eth_clk_gen (
+      .clk_o(s_clk_eth),
+      .clk90_o(s_clk_eth90)
+  );
 
     initial begin: timing_format
         $timeformat(-9, 0, "ns", 9);

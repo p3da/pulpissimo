@@ -20,7 +20,7 @@
 
 pulp_soc:
   commit: v3.0.0_udma_extend
-  server: https://github.com
+  server: git@github.com
   group:  p3da
 
 tbtools:
