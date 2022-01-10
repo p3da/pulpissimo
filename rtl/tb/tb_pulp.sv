@@ -46,7 +46,7 @@ module tb_pulp;
    parameter  REF_CLK_PERIOD = 30517ns;
 
    // for simulation, ref clk for eth_mac is 125kHz
-   parameter  ETH_CLK_PERIOD = 8000ns;
+   parameter  ETH_CLK_PERIOD = 8ns;
 
    // how L2 is loaded. valid values are "JTAG" or "STANDALONE", the latter works only when USE_S25FS256S_MODEL is 1
    parameter  LOAD_L2 = "JTAG";
@@ -609,12 +609,20 @@ module tb_pulp;
 
       .pad_xtal_in        ( w_clk_ref          ),
 
-			.phy_rx_clk									 (s_phy_rx_clk),
-			.phy_rxd										 (s_phy_rxd),
-			.phy_rx_ctl									 (s_phy_rx_ctl),
-			.phy_tx_clk									 (s_phy_tx_clk),
-			.phy_txd										 (s_phy_txd),
-			.phy_tx_ctl									 (s_phy_tx_ctl),
+			// .phy_rx_clk									 (s_phy_rx_clk),
+			// .phy_rxd										 (s_phy_rxd),
+			// .phy_rx_ctl									 (s_phy_rx_ctl),
+			// .phy_tx_clk									 (s_phy_tx_clk),
+			// .phy_txd										 (s_phy_txd),
+			// .phy_tx_ctl									 (s_phy_tx_ctl),
+
+      .phy_rx_clk									 (s_phy_rx_clk),
+      .phy_rxd										 (s_phy_rxd),
+      .phy_rx_ctl									 (s_phy_rx_ctl),
+      .phy_tx_clk									 (s_phy_rx_clk),
+      .phy_txd										 (s_phy_rxd),
+      .phy_tx_ctl									 (s_phy_rx_ctl),
+
 			.phy_reset_n                 (s_phy_reset_n),
 
       .clk_eth                     (s_clk_eth),
