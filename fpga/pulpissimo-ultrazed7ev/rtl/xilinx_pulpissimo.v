@@ -272,7 +272,7 @@ sync_reset #(
 		.N(4)
 ) sync_reset_125mhz_inst (
 		.clk(clk_eth),
-    .rst(~mmcm_locked),
+    .rst(mmcm_locked),
     .out(rst_eth)
 );
 
