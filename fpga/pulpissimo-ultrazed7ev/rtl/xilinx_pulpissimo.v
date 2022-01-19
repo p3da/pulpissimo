@@ -95,6 +95,11 @@ wire clk_eth_125mhz_mmcm_out; // mmcm output for ethernet mac clock
 wire clk_eth_125mhz90_mmcm_out; // mmcm output for ethernet mac clock (90 deg phase)
 wire clk_eth; // bufg output for ethernet mac clock
 wire clk_eth90; // bufg output for ethernet mac clock (90 degree phase)
+wire rst_eth; // ethernet MAC reset
+
+wire clk_ptp_250mhz_mmcm_out; // mmcm output for ptp clock
+wire clk_ptp; // bufg output for ptp clock
+wire rst_ptp; // ptp clock reset
 
 // mmcm signals
 wire mmcm_clkfb;
@@ -130,34 +135,47 @@ i_sysclk_iobuf (
 		.O(sys_clk_ibufg)
  );
 
-// MMCM instance
-// 300 MHz in
-// 125 MHz out for SoC (clk_125mhz_mmcm_out)
-// 125 MHz out for Ethernet Mac (clk_eth_125mhz90_mmcm_out)
-// 125 MHz out with phase 90 degrees (clk_eth_125mhz90_mmcm_out)
+/* MMCM instance
+ *
+ * sys_clk_ibufg = 300MHz in
+ * clk_125mhz_mmcm_out = 125MHz out (used for xilinx clk manager which
+ *                       generates 20MHz clk for SoC and 10MHz for peripherals;
+ *                       frequencies are configured in pulpissimo/fpga/pulpissimo-ultrazed7ev/fpga-settings.mk)
+ * clk_eth_125mhz_mmcm_out = 125MHz out (used in ethernet MAC; see pulp_soc.sv)
+ * clk_eth_125mhz90_mmcm_out = 125MHz out (phase shifted by 90deg; used in ethernet MAC)
+ * clk_ptp_250mhz_mmcm_out = 250MHz out (used in ptp clk; see pulp_soc.sv)
+ */
 MMCM_BASE #(
 		.BANDWIDTH("OPTIMIZED"),
+
 		.CLKOUT0_DIVIDE_F(12),
 		.CLKOUT0_DUTY_CYCLE(0.5),
 		.CLKOUT0_PHASE(0),
+
 		.CLKOUT1_DIVIDE(12),
 		.CLKOUT1_DUTY_CYCLE(0.5),
 		.CLKOUT1_PHASE(90),
+
 		.CLKOUT2_DIVIDE(12),
 		.CLKOUT2_DUTY_CYCLE(0.5),
 		.CLKOUT2_PHASE(0),
-		.CLKOUT3_DIVIDE(1),
+
+		.CLKOUT3_DIVIDE(6),
 		.CLKOUT3_DUTY_CYCLE(0.5),
 		.CLKOUT3_PHASE(0),
+
 		.CLKOUT4_DIVIDE(1),
 		.CLKOUT4_DUTY_CYCLE(0.5),
 		.CLKOUT4_PHASE(0),
+
 		.CLKOUT5_DIVIDE(1),
 		.CLKOUT5_DUTY_CYCLE(0.5),
 		.CLKOUT5_PHASE(0),
+
 		.CLKOUT6_DIVIDE(1),
 		.CLKOUT6_DUTY_CYCLE(0.5),
 		.CLKOUT6_PHASE(0),
+
 		.CLKFBOUT_MULT_F(5),
 		.CLKFBOUT_PHASE(0),
 		.DIVCLK_DIVIDE(1),
@@ -176,7 +194,7 @@ MMCM_BASE #(
 		.CLKOUT1B(),
 		.CLKOUT2(clk_eth_125mhz_mmcm_out),
 		.CLKOUT2B(),
-		.CLKOUT3(),
+		.CLKOUT3(clk_ptp_250mhz_mmcm_out),
 		.CLKOUT3B(),
 		.CLKOUT4(),
 		.CLKOUT5(),
@@ -192,16 +210,40 @@ BUFG clk_125mhz_bufg_inst (
    .O(ref_clk)
 );
 
-/* ethernet clocks 125 MHz */
+/* ethernet clock 125 MHz */
 BUFG clk_eth_125mhz_bufg_inst (
    .I(clk_eth_125mhz_mmcm_out),
    .O(clk_eth)
 );
 
-/* ethernet clocks 125 MHz with */
+/* ethernet clock 125 MHz */
 BUFG clk_eth_125mhz90_bufg_inst (
    .I(clk_eth_125mhz90_mmcm_out),
    .O(clk_eth90)
+);
+
+/* clock for ptp clock 250 MHz */
+BUFG clk_ptp_250mhz_bufg_inst (
+   .I(clk_ptp_250mhz_mmcm_out),
+   .O(clk_ptp)
+);
+
+/* Synchronous reset for ethernet mac */
+sync_reset #(
+		.N(4)
+) sync_reset_125mhz_inst (
+		.clk(clk_eth),
+    .rst(mmcm_locked),
+    .out(rst_eth)
+);
+
+/* Synchronous reset for ptp clock */
+sync_reset #(
+    .N(4)
+) sync_reset_250MHz_inst (
+    .clk(clk_ptp),
+    .rst(mmcm_locked),
+    .out(rst_ptp)
 );
 
 pulpissimo #(
@@ -264,43 +306,14 @@ pulpissimo #(
 		.clk_eth(clk_eth),
 		.clk_eth90(clk_eth90),
 		.rst_eth(rst_eth),
-		.led(led)
+		.led(led),
+
+    .clk_ptp(clk_ptp),
+    .rst_ptp(rst_ptp)
 );
 
-/* Synchronous reset required for ethernet mac */
-sync_reset #(
-		.N(4)
-) sync_reset_125mhz_inst (
-		.clk(clk_eth),
-    .rst(mmcm_locked),
-    .out(rst_eth)
-);
 
-//  udp_complete_wrapper #(
-// 		.TARGET("XILINX")
-// ) udp_complete_wrapper_i (
-// 		/*
-// 		 * Clock: 125MHz
-// 		 * Synchronous reset
-// 		 */
-// 		.clk_125mhz(clk_eth),
-// 		.clk90_125mhz(clk_eth90),
-// 		.rst_125mhz(rst_eth),
-//
-// 		/**
-// 		 * payload of udp packets is printed to leds
-// 		 */
-// 		.led(led),
-//
-// 		/*
-//      * Ethernet: 1000BASE-T RGMII
-//      */
-//     .phy_rx_clk(phy_rx_clk),
-//     .phy_rxd(phy_rxd),
-//     .phy_rx_ctl(phy_rx_ctl),
-//     .phy_tx_clk(phy_tx_clk),
-//     .phy_txd(phy_txd),
-//     .phy_tx_ctl(phy_tx_ctl),
-//     .phy_reset_n(phy_reset_n)
-// );
+
+
+
 endmodule

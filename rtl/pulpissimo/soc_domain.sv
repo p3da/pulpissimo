@@ -221,7 +221,10 @@ module soc_domain #(
 		input logic         clk_eth90,
 		input logic         rst_eth,
 
-		output logic [7:0]  led
+		output logic [7:0]  led,
+
+    input logic         clk_ptp,
+    input logic         rst_ptp
 
     /*AUTOINOUT*/
 );
@@ -385,7 +388,9 @@ module soc_domain #(
       .clk_eth,
       .clk_eth90,
       .rst_eth,
-			.led
+			.led,
+      .clk_ptp,
+      .rst_ptp
     );
 
 endmodule

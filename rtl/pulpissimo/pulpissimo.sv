@@ -77,7 +77,10 @@ module pulpissimo #(
 	input wire        clk_eth90,
 	input wire        rst_eth,
 
-	output wire [7:0] led
+	output wire [7:0] led,
+
+  input wire        clk_ptp,
+  input wire        rst_ptp
 );
 
   localparam AXI_ADDR_WIDTH             = 32;
@@ -882,7 +885,10 @@ module pulpissimo #(
         .clk_eth90                   (clk_eth90),
         .rst_eth                     (rst_eth),
 
-				.led											   (led)
+				.led											   (led),
+
+        .clk_ptp                     (clk_ptp),
+        .rst_ptp                     (rst_ptp)
         );
 
 assign s_dma_pe_evt_valid               = '0;
