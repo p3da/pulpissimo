@@ -47,6 +47,8 @@ module tb_pulp;
 
    // for simulation, ref clk for eth_mac is 125kHz
    parameter  ETH_CLK_PERIOD = 8ns;
+   // for simulation, ref clk for ptp timestamper is 250kHz
+   parameter  PTP_CLK_PERIOD = 4ns;
 
    // how L2 is loaded. valid values are "JTAG" or "STANDALONE", the latter works only when USE_S25FS256S_MODEL is 1
    parameter  LOAD_L2 = "JTAG";
@@ -237,6 +239,9 @@ module tb_pulp;
    logic s_clk_eth90;
    logic s_rst_eth;
 
+   logic s_clk_ptp;
+   logic s_rst_ptp;
+
    `ifdef USE_DPI
    generate
       if (CONFIG_FILE != "NONE") begin
@@ -361,6 +366,7 @@ module tb_pulp;
 
     assign w_rst_n      = tmp_rst_n;
     assign s_rst_eth    = w_rst_n;
+    assign s_rst_ptp    = w_rst_n;
     assign w_clk_ref    = tmp_clk_ref;
     assign s_cam_valid  = 1'b0;
     assign w_trstn      = tmp_trstn;
@@ -627,7 +633,10 @@ module tb_pulp;
 
       .clk_eth                     (s_clk_eth),
       .clk_eth90                   (s_clk_eth90),
-      .rst_eth                     (s_rst_eth)
+      .rst_eth                     (s_rst_eth),
+
+      .clk_ptp                     (s_clk_ptp),
+      .rst_ptp                     (s_rst_ptp)
    );
 
    tb_clk_gen #(
@@ -642,6 +651,13 @@ module tb_pulp;
   ) i_eth_clk_gen (
       .clk_o(s_clk_eth),
       .clk90_o(s_clk_eth90)
+  );
+
+   tb_clk_gen #(
+      .CLK_PERIOD(PTP_CLK_PERIOD)
+  ) i_ptp_clk_gen (
+      .clk_o(s_clk_ptp),
+      .clk90_o()
   );
 
     initial begin: timing_format
