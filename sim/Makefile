@@ -7,7 +7,9 @@ VSIM				?= vsim
 VLIB				?= vlib
 VMAP				?= vmap
 VSIM_FLAGS	= -gUSE_SDVT_SPI=0 -gUSE_SDVT_CPI=0 -gBAUDRATE=115200 \
-		-gENABLE_DEV_DPI=0 -gLOAD_L2=JTAG -gUSE_SDVT_I2S=0
+		-gENABLE_DEV_DPI=0 -gLOAD_L2=JTAG -gUSE_SDVT_I2S=0 -coverage=1
+
+VOPT_FLAGS      = -cover bcefsx
 
 SVLIB	    =  ../rtl/tb/remote_bitbang/librbs
 
@@ -63,7 +65,7 @@ endif
 clean: clean-deps
 ifdef BENDER
 	@mkdir -p work
-	rm -r work 
+	rm -r work
 else
 	@make --no-print-directory -f $(mkfile_path)/vcompile/ips.mk clean
 	@make --no-print-directory -f $(mkfile_path)/vcompile/rtl.mk clean

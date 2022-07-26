@@ -6,7 +6,7 @@ In the `fpga` folder, run
 ```Shell
 make ultrazed7ev
 ```
-which will generate `pulpissimo_ultrazed7ev.bit`.
+which will generate `pulpissimo_ultrazed_7ev_cc.bit`.
 
 ## Bitstream Download
 To download this bitstream into the FPGA connect the PROG USB header, turn the board on and run (NOT TESTED YET)
@@ -53,5 +53,5 @@ An OpenOCD configuration file for the Digilent JTAG-HS1 adapter is included.
 To use it, run
 
 ```Shell
-$OPENOCD/bin/openocd -f pulpissimo/fpga/pulpissimo-ultrazed7ev/openocd-ultrazed7ev-digilent-jtag-hs1.cfg
+$OPENOCD/bin/openocd -f pulpissimo/fpga/pulpissimo-ultrazed7ev/openocd-ultrazed7ev-digilent-jtag-hs3.cfg
 ```

@@ -126,6 +126,7 @@ if {[info exists ::env(VOPT_FLOW)]} {
                 $common_sdvt_args \
                 $vsim_custom_args \
                 $vsim_vopt_args \
+                -coverage \
                 "
 
     eval $vsim_cmd
