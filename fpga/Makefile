@@ -71,6 +71,17 @@ clean_zcu102: ## Removes all bitstreams, *.log files and vivado related files (r
 	rm -f pulpissimo_zcu102.bit
 	rm -f pulpissimo_zcu102.bin
 
+ultrazed7ev: ## Generates the bistream for the zcu104 board
+	$(MAKE) -C pulpissimo-ultrazed7ev all
+	cp pulpissimo-ultrazed7ev/pulpissimo-ultrazed_7ev_cc.runs/impl_1/xilinx_pulpissimo.bit pulpissimo_ultrazed_7ev_cc.bit
+	cp pulpissimo-ultrazed7ev/pulpissimo-ultrazed_7ev_cc.runs/impl_1/xilinx_pulpissimo.bin pulpissimo_ultrazed_7ev_cc.bin
+	@echo "Bitstream generation for ultrazed7ev board finished. The bitstream Configuration Memory File was copied to ./pulpissimo_ultrazed7ev_cc.bit and ./pulpissimo_ultrazed7ev_cc.bin"
+
+clean_ultrazed7ev: ## Removes all bitstreams, *.log files and vivado related files (rm -rf vivado*) for the ultrazed7ev board.
+	$(MAKE) -C pulpissimo-ultrazed7ev clean
+	rm -f pulpissimo_ultrazed7ev_cc.bit
+	rm -f pulpissimo_ultrazed7ev_cc.bin
+
 
 help: ## Show this help message
 	@echo "PULPissimo on FPGA"

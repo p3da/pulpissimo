@@ -1,14 +1,15 @@
 //-----------------------------------------------------------------------------
-// Title         : SoC Memory Region Definitions
+// Title         : FPGA Bootrom for PULPissimo
 //-----------------------------------------------------------------------------
-// File          : soc_mem_map.svh
+// File          : fpga_bootrom.sv
 // Author        : Manuel Eggimann  <meggimann@iis.ee.ethz.ch>
-// Created       : 30.10.2020
+// Created       : 29.05.2019
 //-----------------------------------------------------------------------------
 // Description :
-// This file contains start and end address definitions for the soc_interconnect.
+// Mockup bootrom that keeps returning jal x0,0 to trap the core in an infinite
+// loop until the debug module takes over control.
 //-----------------------------------------------------------------------------
-// Copyright (C) 2013-2020 ETH Zurich, University of Bologna
+// Copyright (C) 2013-2019 ETH Zurich, University of Bologna
 // Copyright and related rights are licensed under the Solderpad Hardware
 // License, Version 0.51 (the "License"); you may not use this file except in
 // compliance with the License. You may obtain a copy of the License at
@@ -19,23 +20,17 @@
 // specific language governing permissions and limitations under the License.
 //-----------------------------------------------------------------------------
 
-`define SOC_MEM_MAP_TCDM_START_ADDR          32'h1C01_0000
-`define SOC_MEM_MAP_TCDM_END_ADDR            32'h1C09_0000
 
-`define SOC_MEM_MAP_PRIVATE_BANK0_START_ADDR 32'h1C00_0000
-`define SOC_MEM_MAP_PRIVATE_BANK0_END_ADDR   32'h1C00_8000
-
-`define SOC_MEM_MAP_PRIVATE_BANK1_START_ADDR 32'h1C00_8000
-`define SOC_MEM_MAP_PRIVATE_BANK1_END_ADDR   32'h1C01_0000
-
-`define SOC_MEM_MAP_BOOT_ROM_START_ADDR      32'h1A00_0000
-`define SOC_MEM_MAP_BOOT_ROM_END_ADDR        32'h1A04_0000
-
-`define SOC_MEM_MAP_AXI_PLUG_START_ADDR      32'h1000_0000
-`define SOC_MEM_MAP_AXI_PLUG_END_ADDR        32'h1040_0000
-
-`define SOC_MEM_MAP_PERIPHERALS_START_ADDR   32'h1A10_0000
-`define SOC_MEM_MAP_PERIPHERALS_END_ADDR     32'h1A40_0000
-
-`define SOC_MEM_MAP_WIDE_ALU_START_ADDR      32'h1A40_0000
-`define SOC_MEM_MAP_WIDE_ALU_END_ADDR        32'h1A40_1000
+module fpga_bootrom
+  #(
+    parameter ADDR_WIDTH=32,
+    parameter DATA_WIDTH=32
+    )
+  (
+   input logic                   CLK,
+   input logic                   CEN,
+   input logic [ADDR_WIDTH-1:0]  A,
+   output logic [DATA_WIDTH-1:0] Q
+   );
+  assign Q = 32'h0000006f; //jal x0,0
+endmodule : fpga_bootrom
